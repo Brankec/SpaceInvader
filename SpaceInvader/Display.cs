@@ -14,7 +14,7 @@ namespace SpaceInvader
     {
         private RenderWindow _window;
 
-        public void init()
+        public void Init()
         {
             ContextSettings settings = new ContextSettings();
             settings.DepthBits = 24;
@@ -27,24 +27,24 @@ namespace SpaceInvader
         void OnClose(object sender, EventArgs e)
         {
             // Close the window when OnClose event is received
-            close();
+            Close();
         }
-        public void close()
+        public void Close()
         {
             _window.Close();
         }
 
-        public void clear()
+        public void Clear()
         {
             _window.Clear();
         }
 
-        public void update()
+        public void Update()
         {
             _window.Display();
         }
 
-        public void drawPlayer(ref Player player)
+        public void DrawPlayer(ref Player player)
         {
             _window.Draw(player.playerRect);
 
@@ -53,33 +53,36 @@ namespace SpaceInvader
                 _window.Draw(player.projectiles[i].projectileRect);
             }
         }
-        public void drawInvaders(ref Invader[,] invaders)
+        public void DrawInvaders(ref Invader[,] invaders)
         {
             for (int i = 0; i < invaders.GetLength(0); i++)
             {
                 for (int j = 0; j < invaders.GetLength(1); j++)
                 {
-                    _window.Draw(invaders[i, j].rectangleShape);
+                    if (invaders[i, j] != null) // checks if the element is null
+                    {
+                        _window.Draw(invaders[i, j].invaderRect);
+                    }
                 }
             }
         }
 
-        public void checkForEvents()
+        public void CheckForEvents()
         {
             _window.DispatchEvents();
             _window.Closed += OnClose;
         }
 
-        public bool isOpen()
+        public bool IsOpen()
         {
             return _window.IsOpen;
         }
 
 
 
-        private static Display _Instance; //Singleton
+        private static Display _Instance; // Singleton
         private Display() { }
-        public static Display getInstance()
+        public static Display GetInstance()
         {
             if (_Instance == null)
             {

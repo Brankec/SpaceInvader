@@ -9,17 +9,17 @@ namespace SpaceInvader
     {
         public Vector2f velocity = new Vector2f(0, 0);
         public RectangleShape playerRect = new RectangleShape(new Vector2f(100, 100));
-        private bool isFired = false; // checked so the player only shoots once per projectile life span
+        private bool isFired = false; // Checked so the player only shoots once per projectile life span
 
         public List<Projectile> projectiles = new List<Projectile>();
 
         public void PlayerControls() // Player controls
         {
-            if (Keyboard.IsKeyPressed(Keyboard.Key.D)) //Right
+            if (Keyboard.IsKeyPressed(Keyboard.Key.D)) // Right
             {
                 velocity.X = 1;
             }
-            else if (Keyboard.IsKeyPressed(Keyboard.Key.A)) //Left
+            else if (Keyboard.IsKeyPressed(Keyboard.Key.A)) // Left
             {
                 velocity.X = -1;
             }
@@ -28,9 +28,9 @@ namespace SpaceInvader
                 velocity.X = 0;
             }
 
-            if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isFired) // fire
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Space) && !isFired) // Fire
             {
-                fire();
+                Fire();
                 isFired = true;
             }
 
@@ -59,10 +59,9 @@ namespace SpaceInvader
                 }
             }
         }
-        private void fire() // Fires the projectile upwards
+        private void Fire() // Fires the projectile upwards
         {
             projectiles.Add(new Projectile(playerRect.Position.X + playerRect.Size.X/2, playerRect.Position.Y));
-            
         }
 
         private static Player _Instance; //Singleton
@@ -71,7 +70,7 @@ namespace SpaceInvader
             playerRect.Position = new Vector2f(playerRect.Position.X + Globals.windowSize.X/2 - playerRect.Size.X/2, Globals.windowSize.Y - (int)(playerRect.Size.Y*1.5));
             playerRect.FillColor = new Color(0, 255, 0);
         }
-        public static Player getInstance()
+        public static Player GetInstance()
         {
             if (_Instance == null)
             {

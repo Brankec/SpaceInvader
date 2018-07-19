@@ -9,7 +9,7 @@ namespace SpaceInvader
     {
         public bool playerProjectile = true;
         public bool isDead = false;
-        public RectangleShape projectileRect = new RectangleShape(new Vector2f(2, 10));
+        public RectangleShape projectileRect = new RectangleShape(new Vector2f(5, 20));
         private Vector2f velocity = new Vector2f(0, 0.5f);
 
         public Projectile(float positionX, float positionY)

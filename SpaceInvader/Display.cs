@@ -22,6 +22,7 @@ namespace SpaceInvader
             settings.MinorVersion = 3;
 
             _window = new RenderWindow(new VideoMode((uint)Globals.windowSize.X, (uint)Globals.windowSize.Y), "Space Invader");
+            _window.SetFramerateLimit(60);
         }
 
         void OnClose(object sender, EventArgs e)
@@ -62,6 +63,10 @@ namespace SpaceInvader
                     if (invaders[i, j] != null) // checks if the element is null
                     {
                         _window.Draw(invaders[i, j].invaderRect);
+                        for (int p = 0; p < invaders[i, j].projectiles.Count; p++)
+                        {
+                            _window.Draw(invaders[i, j].projectiles[p].projectileRect);
+                        }
                     }
                 }
             }

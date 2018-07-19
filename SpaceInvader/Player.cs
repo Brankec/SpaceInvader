@@ -10,6 +10,7 @@ namespace SpaceInvader
         public Vector2f velocity = new Vector2f(0, 0);
         public RectangleShape playerRect = new RectangleShape(new Vector2f(100, 100));
         private bool isFired = false; // Checked so the player only shoots once per projectile life span
+        private bool isDead = false;
 
         public List<Projectile> projectiles = new List<Projectile>();
 
@@ -17,11 +18,11 @@ namespace SpaceInvader
         {
             if (Keyboard.IsKeyPressed(Keyboard.Key.D)) // Right
             {
-                velocity.X = 1;
+                velocity.X = 3;
             }
             else if (Keyboard.IsKeyPressed(Keyboard.Key.A)) // Left
             {
-                velocity.X = -1;
+                velocity.X = -3;
             }
             else // Stop
             {
@@ -49,7 +50,7 @@ namespace SpaceInvader
                 {
                     if (!projectiles[i].isDead)
                     {
-                        projectiles[i].shoot(); // Call the method shoot which will update projectiles position;
+                        projectiles[i].Update(); // Call the method shoot which will update projectiles position;
                     }
                     else
                     {
@@ -61,7 +62,19 @@ namespace SpaceInvader
         }
         private void Fire() // Fires the projectile upwards
         {
-            projectiles.Add(new Projectile(playerRect.Position.X + playerRect.Size.X/2, playerRect.Position.Y));
+            projectiles.Add(new Projectile(playerRect.Position.X + playerRect.Size.X/2, playerRect.Position.Y, true));
+        }
+
+        public void TrackInvaderProjectile(ref List<Projectile> invaderProjectile)
+        {
+            for (int i = 0; i < invaderProjectile.Count; i++)
+            {
+                if (invaderProjectile[i].projectileRect.GetGlobalBounds().Intersects(playerRect.GetGlobalBounds())) // checks if the projectile is within the bounds
+                {
+                    isDead = true;
+                    invaderProjectile[i].isDead = true;
+                }
+            }
         }
 
         private static Player _Instance; //Singleton

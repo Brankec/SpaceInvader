@@ -35,7 +35,7 @@ namespace SpaceInvader
             {
                 for (int j = 0; j < invaders.GetLength(1); j++)
                 {
-                    invaders[i, j] = new Invader(new Vector2i(j, i)); // j is row, i is column
+                    invaders[i, j] = new Invader(new Vector2i(j, i), j, i); // j is row, i is column
                 }
             }
         }
@@ -58,7 +58,8 @@ namespace SpaceInvader
                         if (!invaders[i, j].isDead)
                         {
                             invaders[i, j].UpdateInvader();
-                            invaders[i, j].TrackPlayerProjectile(ref player.projectiles);
+                            invaders[i, j].TrackPlayerProjectile(ref player.projectiles); // tracks if the player hit invader
+                            player.TrackInvaderProjectile(ref invaders[i, j].projectiles); // tracks if the invader hit the player
                         }
                         else
                         {

@@ -2,6 +2,7 @@
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
+using System;
 
 namespace SpaceInvader
 {
@@ -9,40 +10,96 @@ namespace SpaceInvader
     {
         public RectangleShape invaderRect = new RectangleShape(new Vector2f(40, 40));
         public bool isDead = false;
-        private static Vector2f velocity = new Vector2f(0.1f, 0);
+        private static Vector2f velocity = new Vector2f(Globals.windowSize.X/80, 0);
         private Vector2i invaderPosition = new Vector2i(0, 0);
 
-        private static float levelPosition; // The invaders position in the grid 5*11
+        public List<Projectile> projectiles = new List<Projectile>();
 
-        public Invader(Vector2i position)
+        private static float newLevelPosition; // The invaders position in the grid 5*11
+        private static int level = 1;
+
+        private Time moveStep = new Time();
+        private Time randomTime = new Time();
+        private Clock moveClock = new Clock();
+        private Clock randomClock = new Clock();
+        Random rnd1;
+        Random rnd2;
+
+        public Invader(Vector2i position, int gridX, int gridY)
         {
+            rnd1 = new Random(position.X * position.Y * 10);
+            rnd2 = new Random((position.Y + 1) / (position.X + 1) * 100);
+
             invaderPosition = position;
-            levelPosition = (Globals.windowSize.Y / invaderRect.Size.Y * 3) * invaderPosition.Y;
-            invaderRect.Position = new Vector2f(invaderRect.Size.X*2 + (Globals.windowSize.X / invaderRect.Size.X * 3) * invaderPosition.X, invaderRect.Size.Y * 2 + (Globals.windowSize.Y / invaderRect.Size.Y*3) * invaderPosition.Y); // Initial position
+            UpdateLevel();
+            invaderRect.Position = new Vector2f(invaderRect.Size.X*2 + (Globals.windowSize.X / invaderRect.Size.X * 3) * invaderPosition.X, newLevelPosition); // Initial position
         }
 
         public void UpdateInvader()
         {
+            moveStep = moveClock.ElapsedTime;
+            randomTime = randomClock.ElapsedTime;
+
             MoveInvader();
+
+            for (int i = 0; i < projectiles.Count; i++)
+            {
+                if (!projectiles[i].isDead)
+                {
+                    projectiles[i].Update();
+                }
+                else
+                {
+                    projectiles.RemoveAt(i); // Removes the instance of the, out of window bounds, projectile
+                }
+            }
+
+            if (invaderPosition.Y == 4)
+            {
+                Fire();
+            }
         }
         private void MoveInvader()
         {
             if (!(invaderRect.Position.X < 0 && velocity.X < 0) &&
                 !((invaderRect.Position.X + invaderRect.Size.X) > Globals.windowSize.X && velocity.X > 0))
             {
-                invaderRect.Position = new Vector2f(invaderRect.Position.X + velocity.X, invaderRect.Position.Y + velocity.Y);
+                if (moveStep.AsSeconds() > 1)
+                {
+                    invaderRect.Position = new Vector2f(invaderRect.Position.X + velocity.X, invaderRect.Position.Y + velocity.Y);
+                    moveClock.Restart();
+                }
             }
             else
             {
                 velocity.X *= -1;
+                level++;
             }
 
-            //if (isCollide)
-            //{
-            //    invaderRect.Position = new Vector2f(invaderRect.Position.X, invaderRect.Position.Y + 50);
-            //}
-        }
+            UpdateLevel();
 
+            if (invaderRect.Position.Y != newLevelPosition)
+            {
+                invaderRect.Position = new Vector2f(invaderRect.Position.X, newLevelPosition);
+            }
+
+        }
+        private void UpdateLevel()
+        {
+            newLevelPosition = ((Globals.windowSize.Y / invaderRect.Size.Y * 3) * invaderPosition.Y) + 20 * level;
+        }
+        private void Fire()
+        {
+            if (randomTime.AsSeconds() > 1)
+            {
+                if (rnd1.Next(1,25) == rnd2.Next(1,20))
+                {
+                    projectiles.Add(new Projectile(invaderRect.Position.X + invaderRect.Size.X/2, invaderRect.Position.Y));
+                }
+
+                randomClock.Restart();
+            }
+        }
 
         public void TrackPlayerProjectile(ref List<Projectile> playerProjectile)
         {

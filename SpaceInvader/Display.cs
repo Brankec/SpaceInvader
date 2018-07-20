@@ -71,6 +71,13 @@ namespace SpaceInvader
                 }
             }
         }
+        public void DrawBarriers(ref Barrier[] barriers)
+        {
+            for (int i = 0; i < barriers.Length; i++)
+            {
+                _window.Draw(barriers[i].barrierRect);
+            }
+        }
 
         public void CheckForEvents()
         {

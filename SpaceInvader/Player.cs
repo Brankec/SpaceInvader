@@ -8,7 +8,7 @@ namespace SpaceInvader
     class Player
     {
         public Vector2f velocity = new Vector2f(0, 0);
-        public RectangleShape playerRect = new RectangleShape(new Vector2f(100, 100));
+        public RectangleShape playerRect = new RectangleShape(new Vector2f(100, 50));
         private bool isFired = false; // Checked so the player only shoots once per projectile life span
         private bool isDead = false;
 

@@ -21,10 +21,11 @@ namespace SpaceInvader
                 display.CheckForEvents(); // Checks for events such as closing the window
 
                 player.PlayerControls();
-                LoopInvaders(ref invaders, ref player);
+                Loop(ref player, ref invaders, ref barriers);
 
                 display.DrawPlayer(ref player); // Player rectangle being passed to draw
                 display.DrawInvaders(ref invaders); // Invader rectangle being passed to draw
+                display.DrawBarriers(ref barriers);
                 display.Update(); // Draws on the window from the buffer
             }
         }
@@ -43,11 +44,11 @@ namespace SpaceInvader
         {
             for (int i = 0; i < barriers.Length; i++)
             {
-                barriers[i] = new Barrier();
+                barriers[i] = new Barrier(i);
             }
         }
 
-        static void LoopInvaders(ref Invader[,] invaders, ref Player player) // Loops through all the invaders and updates their position
+        static void Loop(ref Player player, ref Invader[,] invaders, ref Barrier[] barriers) // Loops through all the invaders and updates their position
         {
             for (int i = 0; i < invaders.GetLength(0); i++)
             {
@@ -60,6 +61,11 @@ namespace SpaceInvader
                             invaders[i, j].UpdateInvader();
                             invaders[i, j].TrackPlayerProjectile(ref player.projectiles); // tracks if the player hit invader
                             player.TrackInvaderProjectile(ref invaders[i, j].projectiles); // tracks if the invader hit the player
+
+                            for (int p = 0; p < barriers.Length; p++)
+                            {
+                                barriers[p].TrackProjectile(ref invaders[i, j].projectiles);
+                            }
                         }
                         else
                         {
@@ -67,6 +73,10 @@ namespace SpaceInvader
                         }
                     }
                 }
+            }
+            for(int i = 0; i < barriers.Length; i++)
+            {
+                barriers[i].TrackProjectile(ref player.projectiles);
             }
         }
     }

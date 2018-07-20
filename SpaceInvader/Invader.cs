@@ -17,18 +17,21 @@ namespace SpaceInvader
 
         private static float newLevelPosition; // The invaders position in the grid 5*11
         private static int level = 1;
+        private static int tempLevel = 0;
 
         private Time moveStep = new Time();
         private Time randomTime = new Time();
         private Clock moveClock = new Clock();
         private Clock randomClock = new Clock();
-        Random rnd1;
-        Random rnd2;
+        Random rnd1; // random projectile fire
+        Random rnd2; // random projectile fire
+        Random rndShoot; // random projectile fire
 
         public Invader(Vector2i position, int gridX, int gridY)
         {
             rnd1 = new Random(position.X * position.Y * 10);
             rnd2 = new Random((position.Y + 1) / (position.X + 1) * 100);
+            rndShoot = new Random(invaderPosition.X + invaderPosition.Y + gridX + gridY);
 
             invaderPosition = position;
             UpdateLevel();
@@ -37,6 +40,11 @@ namespace SpaceInvader
 
         public void UpdateInvader()
         {
+            if(level < 11)
+            {
+                tempLevel = level; // at high speeds the invaders get out of sequence so I limited them to speed 10 as max
+            }
+
             moveStep = moveClock.ElapsedTime;
             randomTime = randomClock.ElapsedTime;
 
@@ -64,7 +72,7 @@ namespace SpaceInvader
             if (!(invaderRect.Position.X < 0 && velocity.X < 0) &&
                 !((invaderRect.Position.X + invaderRect.Size.X) > Globals.windowSize.X && velocity.X > 0))
             {
-                if (moveStep.AsSeconds() > 1)
+                if (moveStep.AsSeconds() > 1f/(float)tempLevel)
                 {
                     invaderRect.Position = new Vector2f(invaderRect.Position.X + velocity.X, invaderRect.Position.Y + velocity.Y);
                     moveClock.Restart();
@@ -90,9 +98,9 @@ namespace SpaceInvader
         }
         private void Fire()
         {
-            if (randomTime.AsSeconds() > 1)
+            if (randomTime.AsSeconds() > rndShoot.Next(1,20))
             {
-                if (rnd1.Next(1,25) == rnd2.Next(1,20))
+                if (rnd1.Next(1,20) == rnd2.Next(1,20))
                 {
                     projectiles.Add(new Projectile(invaderRect.Position.X + invaderRect.Size.X/2, invaderRect.Position.Y));
                 }

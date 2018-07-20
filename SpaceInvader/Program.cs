@@ -4,8 +4,12 @@ namespace SpaceInvader
 {
     class Program
     {
+        static bool gameOver = false;
+        static int invaderCount = 0;
+
         static void Main(string[] args)
         {
+            Globals g = new Globals();// DO NOT USE
             Barrier[] barriers = new Barrier[4]; // The original had 4 barriers
             InitializeBarriers(ref barriers); 
             Invader[,] invaders = new Invader[5, 11]; // The original had a grid of 5 x 11 invaders
@@ -22,6 +26,15 @@ namespace SpaceInvader
 
                 player.PlayerControls();
                 Loop(ref player, ref invaders, ref barriers);
+
+                if (player.isDead || gameOver)
+                {
+                    display.Close();
+                    for(int i = 0; i < 100; i++)
+                    {
+                        System.Console.WriteLine("YOU LOST!");
+                    }
+                }
 
                 display.DrawPlayer(ref player); // Player rectangle being passed to draw
                 display.DrawInvaders(ref invaders); // Invader rectangle being passed to draw
@@ -66,6 +79,7 @@ namespace SpaceInvader
                             {
                                 barriers[p].TrackProjectile(ref invaders[i, j].projectiles);
                             }
+
                         }
                         else
                         {
@@ -77,6 +91,11 @@ namespace SpaceInvader
             for(int i = 0; i < barriers.Length; i++)
             {
                 barriers[i].TrackProjectile(ref player.projectiles);
+            }
+
+            if (invaderCount == invaders.GetLength(0)* invaders.GetLength(1))
+            {
+                gameOver = true;
             }
         }
     }

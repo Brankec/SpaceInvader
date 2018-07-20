@@ -18,6 +18,7 @@ namespace SpaceInvader
         private static float newLevelPosition; // The invaders position in the grid 5*11
         private static int level = 1;
         private static int tempLevel = 0;
+        private static int animation = 0;
 
         private Time moveStep = new Time();
         private Time randomTime = new Time();
@@ -27,20 +28,26 @@ namespace SpaceInvader
         Random rnd2; // random projectile fire
         Random rndShoot; // random projectile fire
 
+        private Vector2i grid;
+
         public Invader(Vector2i position, int gridX, int gridY)
         {
             rnd1 = new Random(position.X * position.Y * 10);
             rnd2 = new Random((position.Y + 1) / (position.X + 1) * 100);
             rndShoot = new Random(invaderPosition.X + invaderPosition.Y + gridX + gridY);
+            grid = new Vector2i(gridX, gridY);
 
             invaderPosition = position;
             UpdateLevel();
             invaderRect.Position = new Vector2f(invaderRect.Size.X*2 + (Globals.windowSize.X / invaderRect.Size.X * 3) * invaderPosition.X, newLevelPosition); // Initial position
+
+            Globals.InvaderTexture(ref invaderRect, animation);
         }
 
         public void UpdateInvader()
         {
-            if(level < 11)
+
+            if (level < 7)
             {
                 tempLevel = level; // at high speeds the invaders get out of sequence so I limited them to speed 10 as max
             }
@@ -66,22 +73,36 @@ namespace SpaceInvader
             {
                 Fire();
             }
+
         }
+
         private void MoveInvader()
         {
             if (!(invaderRect.Position.X < 0 && velocity.X < 0) &&
                 !((invaderRect.Position.X + invaderRect.Size.X) > Globals.windowSize.X && velocity.X > 0))
             {
-                if (moveStep.AsSeconds() > 1f/(float)tempLevel)
+                if (moveStep.AsSeconds() > 1f / (float)tempLevel)
                 {
                     invaderRect.Position = new Vector2f(invaderRect.Position.X + velocity.X, invaderRect.Position.Y + velocity.Y);
+                    Globals.InvaderTexture(ref invaderRect, animation);
+
+                    if (animation == 0)
+                    {
+                        animation = 1;
+                    }
+                    else if (animation == 1)
+                    {
+                        animation = 0;
+                    }
+
                     moveClock.Restart();
                 }
             }
             else
             {
                 velocity.X *= -1;
-                level++;
+                if(level < 10)
+                    level++;
             }
 
             UpdateLevel();

@@ -1,4 +1,3 @@
-C:\Users\Gejmer\Documents\Visual Studio 2017\Projects\SpaceInvader\SpaceInvader\obj\Debug\SpaceInvader.csprojAssemblyReference.cache
 C:\Users\Gejmer\Documents\Visual Studio 2017\Projects\SpaceInvader\SpaceInvader\obj\Debug\SpaceInvader.csproj.CoreCompileInputs.cache
 C:\Users\Gejmer\Documents\Visual Studio 2017\Projects\SpaceInvader\SpaceInvader\bin\Debug\csfml-audio-2.dll
 C:\Users\Gejmer\Documents\Visual Studio 2017\Projects\SpaceInvader\SpaceInvader\bin\Debug\csfml-graphics-2.dll
@@ -19,3 +18,4 @@ C:\Users\Gejmer\Documents\Visual Studio 2017\Projects\SpaceInvader\SpaceInvader\
 C:\Users\Gejmer\Documents\Visual Studio 2017\Projects\SpaceInvader\SpaceInvader\obj\Debug\SpaceInvader.csproj.CopyComplete
 C:\Users\Gejmer\Documents\Visual Studio 2017\Projects\SpaceInvader\SpaceInvader\obj\Debug\SpaceInvader.exe
 C:\Users\Gejmer\Documents\Visual Studio 2017\Projects\SpaceInvader\SpaceInvader\obj\Debug\SpaceInvader.pdb
+C:\Users\Gejmer\Documents\Visual Studio 2017\Projects\SpaceInvader\SpaceInvader\obj\Debug\SpaceInvader.csprojAssemblyReference.cache

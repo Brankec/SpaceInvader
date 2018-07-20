@@ -15,7 +15,9 @@ namespace SpaceInvader
         public Barrier(int position)
         {
             barrierRect.Position = new Vector2f(barrierRect.Size.X/2 + (barrierRect.Size.X*2) * position, 600);
-            barrierRect.FillColor = new Color(0, 0, 255);
+
+            Texture playertxr = new Texture("C:/Users/Gejmer/Documents/Visual Studio 2017/Projects/SpaceInvader/SpaceInvader/images/barrier.png");
+            barrierRect.Texture = playertxr;
         }
 
         public void TrackProjectile(ref List<Projectile> projectile)
